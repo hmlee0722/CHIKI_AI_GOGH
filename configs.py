@@ -15,14 +15,6 @@ cfg.IP_ADAPTER_MODULE_PATH = "IP-Adapter/sdxl_models/ip-adapter_sdxl.bin"
 # cross attention module of IP-Adapter
 
 # -------------------------------------------------------------------------
-#ENVIRONMENT
-# -------------------------------------------------------------------------
-cfg.DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-# device setting
-cfg.DTYPE = torch.float16
-# data type for model
-
-# -------------------------------------------------------------------------
 #EXPERIMENT
 # -------------------------------------------------------------------------
 cfg.TARGET_BLOCKS = ["up_blocks.0.attentions.1"]

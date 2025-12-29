@@ -1,10 +1,9 @@
 import torch
-import os
 import io
-import uuid
+import time
 import requests
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse, JSONResponse
 from PIL import Image
 from diffusers import ControlNetModel, StableDiffusionXLControlNetPipeline, DDIMScheduler
 from ip_adapter import IPAdapterXL
@@ -15,6 +14,8 @@ app = FastAPI(title="CHIKI Gogh Style Transfer API",
               description="An API for style transfer using Stable Diffusion XL with ControlNet and IP-Adapter"
              )
 MODEL = None
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+DTYPE = torch.float16
 
 @app.on_event("startup")
 def load_models():
@@ -23,15 +24,15 @@ def load_models():
 
     # 1. Load ControlNet
     controlnet = ControlNetModel.from_pretrained(cfg.CONTROLNET_PATH, 
-                                                 torch_dtype=cfg.DTYPE).to(cfg.DEVICE)
+                                                 torch_dtype=DTYPE).to(DEVICE)
     
     # 2. Load Pipeline
     pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
         cfg.SDXL_BASE_MODEL_PATH,
         controlnet=controlnet,
         safety_checker=None,
-        torch_dtype=cfg.DTYPE
-    ).to(cfg.DEVICE)
+        torch_dtype=DTYPE
+    ).to(DEVICE)
     pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
 
     # Optimized for memory/speed without needing xformers
@@ -43,7 +44,7 @@ def load_models():
         pipe,
         cfg.IP_ADAPTER_EXTRACTOR_PATH,
         cfg.IP_ADAPTER_MODULE_PATH,
-        cfg.DEVICE,
+        DEVICE,
         target_blocks=cfg.TARGET_BLOCKS
     )
 
@@ -150,4 +151,48 @@ async def generate(
         print(f"❌Error during generation: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/health")
+async def health_check():
+    """
+    서비스 상태 및 GPU, 모델 로드 정보를 반환합니다.
+    """
+    try:
+        # GPU 메모리 정보 (torch 사용 시)
+        gpu_info = []
+        if torch.cuda.is_available():
+            for i in range(torch.cuda.device_count()):
+                gpu_info.append({
+                    "id": i,
+                    "name": torch.cuda.get_device_name(i),
+                    "memory_allocated": f"{torch.cuda.memory_allocated(i) / 1024**2:.2f} MB",
+                    "memory_reserved": f"{torch.cuda.memory_reserved(i) / 1024**2:.2f} MB",
+                })
 
+        info = {
+            "status": "healthy",
+            "timestamp": time.time(),
+            "model_loaded": MODEL is not None,
+            "config": {
+                "device": str(cfg.DEVICE),
+                "dtype": str(cfg.DTYPE),
+                "style_image_id": cfg.STYLE_IMAGE_ID,
+                "ip_adapter_scale": cfg.IP_ADAPTER_SCALE
+            },
+            "gpu": {
+                "cuda_available": torch.cuda.is_available(),
+                "device_count": torch.cuda.device_count(),
+                "details": gpu_info
+            }
+        }
+        
+        # 모델이 로드되지 않았을 경우 상태를 warning으로 표시하고 싶다면 아래 주석 해제
+        # if MODEL is None:
+        #     info["status"] = "degraded"
+            
+        return JSONResponse(content=info, status_code=200)
+
+    except Exception as e:
+        return JSONResponse(
+            content={"status": "unhealthy", "error": str(e)}, 
+            status_code=500
+        )
