@@ -19,8 +19,16 @@ cfg.IP_ADAPTER_MODULE_PATH = "IP-Adapter/sdxl_models/ip-adapter_sdxl.bin"
 # -------------------------------------------------------------------------
 cfg.TARGET_BLOCKS = ["up_blocks.0.attentions.1"]
 # target blocks to apply IP-Adapter
-cfg.IP_ADAPTER_SCALE = 1.2
+cfg.IP_ADAPTER_SCALE = 1.0
 # scale for style strength
+cfg.CONTROLNET_CONDITIONING_SCALE = 0.8
+# scale for controlling structure of content image
+cfg.SHORT_SIDE = 768
+# short side size for resizing content image before feeding into controlnet
 cfg.STYLE_IMAGE_ID = 103
 # default style image id
-# 103 : starry night
+cfg.PROMPT = "masterpiece, best quality, high quality, beautiful, adorable, cute, perfect face, soft smiling face, perfect eyes"
+# default prompt for generation
+cfg.NEGATIVE_PROMPT = "text, watermark, lowres, worst quality, low quality, blurry, deformed, noisy, saturationm"
+# default negative prompt for generation
+cfg.SEED = 42

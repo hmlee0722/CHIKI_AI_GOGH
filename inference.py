@@ -15,7 +15,7 @@ from utils import resize_image, empty_cache
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--target_blocks", nargs="+", type=str, default=["up_blocks.0.attentions.1"]) # target blocks to apply IP-Adapter
-parser.add_argument("--scale", type=float, default=1.2) # scale for style strength
+parser.add_argument("--scale", type=float, default=1.0) # scale for style strength
 parser.add_argument("--style_image_id", type=int, default=103)
 parser.add_argument("--contet_image_id", type=int, default=14)
 args = parser.parse_args()
@@ -56,7 +56,7 @@ style_image = Image.open(style_image_path).convert("RGB") # get image file
 content_image = Image.open(content_image_path).convert("RGB") # get image file
 H, W = content_image.size # remember original size to resize output later
 
-controlnet_cond_image = resize_image(content_image, short=1024) # resize content image to 1024 short side, because sdxl works better with larger size inputs
+controlnet_cond_image = resize_image(content_image, short=768) # resize content image to 1024 short side, because sdxl works better with larger size inputs
 
 input_kwargs = {
     'pil_image': style_image,
@@ -74,7 +74,7 @@ with torch.no_grad():
         num_samples=1,
         num_inference_steps=30, 
         seed=42,
-        controlnet_conditioning_scale=0.6,
+        controlnet_conditioning_scale=0.8,
         **input_kwargs
     ) # we don't need to change anything else for generation just care about input_kwargs
 # it takes 30 steps to get a result, we use ip-adapter scale for style strength control, and keep controlnet strength fixed at 0.6 for controlling structure
