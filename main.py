@@ -14,7 +14,7 @@ app = FastAPI(title="CHIKI Gogh Style Transfer API",
               description="An API for style transfer using Stable Diffusion XL with ControlNet and IP-Adapter"
              )
 MODEL = None
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+DEVICE = "cuda:2" if torch.cuda.is_available() else "cpu"
 DTYPE = torch.float16
 
 @app.on_event("startup")
@@ -158,8 +158,10 @@ async def health_check():
     return JSONResponse(
         content={"status": "healthy"}, 
         status_code=200
-    )
 
+    )
+'''
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
+'''
