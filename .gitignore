@@ -4,3 +4,4 @@
 **/__pycache__/
 **/@eaDir/
 .DS_Store
+*.Thumbs.db

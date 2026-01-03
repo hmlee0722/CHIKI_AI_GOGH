@@ -19,16 +19,16 @@ cfg.IP_ADAPTER_MODULE_PATH = "IP-Adapter/sdxl_models/ip-adapter_sdxl.bin"
 # -------------------------------------------------------------------------
 cfg.TARGET_BLOCKS = ["up_blocks.0.attentions.1"]
 # target blocks to apply IP-Adapter
-cfg.IP_ADAPTER_SCALE = 1.0
+cfg.IP_ADAPTER_SCALE = 0.6
 # scale for style strength
-cfg.CONTROLNET_CONDITIONING_SCALE = 0.8
+cfg.CONTROLNET_CONDITIONING_SCALE = 0.6
 # scale for controlling structure of content image
-cfg.SHORT_SIDE = 768
+cfg.SHORT_SIDE = 1024
 # short side size for resizing content image before feeding into controlnet
 cfg.STYLE_IMAGE_ID = 103
 # default style image id
-cfg.PROMPT = "masterpiece, best quality, high quality, beautiful, adorable, cute, perfect face, soft smiling face, perfect eyes"
+cfg.PROMPT = "A masterpiece oil painting in the vivid style of Vincent van Gogh, depicting one or more people with aesthetically enhanced, charming, and detailed facial features. The artwork showcases expressive eyes and a well-defined complexion for each individual. Thick, swirling impasto brushstrokes, vibrant post-impressionistic colors, and a dynamic, textured background reminiscent of starry nights or swirling landscapes. High-definition artistic quality, sharp focus on faces, cinematic lighting"
 # default prompt for generation
-cfg.NEGATIVE_PROMPT = "text, watermark, lowres, worst quality, low quality, blurry, deformed, noisy, saturationm"
+cfg.NEGATIVE_PROMPT = "text, watermark, lowres, worst quality, low quality, blurry, deformed"
 # default negative prompt for generation
 cfg.SEED = 42
