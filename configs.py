@@ -27,7 +27,7 @@ cfg.SHORT_SIDE = 1024
 # short side size for resizing content image before feeding into controlnet
 cfg.STYLE_IMAGE_ID = 103
 # default style image id
-cfg.PROMPT = "A masterpiece oil painting in the vivid style of Vincent van Gogh, depicting one or more people with aesthetically enhanced, charming, and detailed facial features. The artwork showcases expressive eyes and a well-defined complexion for each individual. Thick, swirling impasto brushstrokes, vibrant post-impressionistic colors, and a dynamic, textured background reminiscent of starry nights or swirling landscapes. High-definition artistic quality, sharp focus on faces, cinematic lighting"
+cfg.PROMPT = "A masterpiece oil painting in the vivid style of Vincent van Gogh, depicting one or more people with aesthetically enhanced, charming, and detailed facial features. Thick, swirling impasto brushstrokes, vibrant post-impressionistic colors, and a dynamic, textured background reminiscent of starry nights. High-definition artistic quality, sharp focus on faces, cinematic lighting"
 # default prompt for generation
 cfg.NEGATIVE_PROMPT = "text, watermark, lowres, worst quality, low quality, blurry, deformed"
 # default negative prompt for generation
