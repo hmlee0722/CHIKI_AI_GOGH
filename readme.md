@@ -13,7 +13,7 @@ docker run -itd \
 --name chiki_gogh \
 --gpus all \
 --retart unless-stopped \
--v /home/ec2-user/CHIKI_AI_GOGH \
+-v /home/ec2-user/CHIKI_AI_GOGH:/root/CHIKI_AI_GOGH \
 -p 80:8000 \
 leehwalmin/chiki:latest \
 bash /root/CHIKI_AI_GOGH/server_runner.sh
