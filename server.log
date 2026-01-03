@@ -1,0 +1,15 @@
+INFO:     Started server process [2676636]
+INFO:     Waiting for application startup.
+Keyword arguments {'safety_checker': None} are not expected by StableDiffusionXLControlNetPipeline and will be ignored.
+🚀Loading models...
+Loading pipeline components...:   0%|          | 0/7 [00:00<?, ?it/s]`torch_dtype` is deprecated! Use `dtype` instead!
+Loading pipeline components...:  29%|██▊       | 2/7 [00:00<00:00, 13.26it/s]Loading pipeline components...:  57%|█████▋    | 4/7 [00:00<00:00, 12.41it/s]Loading pipeline components...:  86%|████████▌ | 6/7 [00:01<00:00,  2.48it/s]Loading pipeline components...: 100%|██████████| 7/7 [00:01<00:00,  3.57it/s]
+/root/workplace/CHIKI/ip_adapter/ip_adapter.py:149: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  state_dict = torch.load(self.ip_ckpt, map_location="cpu")
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2676636]
+✅Models loaded successfully!

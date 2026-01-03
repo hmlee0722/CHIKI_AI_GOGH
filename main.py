@@ -3,7 +3,7 @@ import io
 import time
 import requests
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request
-from fastapi.responses import StreamingResponse, JSONResponse
+from fastapi.responses import StreamingResponse, JSONResponse, Response
 from PIL import Image
 from diffusers import ControlNetModel, StableDiffusionXLControlNetPipeline, DDIMScheduler
 from ip_adapter import IPAdapterXL
@@ -90,12 +90,11 @@ async def generate_from_upload(
             )
 
         # 4. Return Result
-        result = generated[0].resize((W, H), resample=Image.Resampling.LANCZOS)
+        result = generated[0].resize((W, H), resample=Image.Resampling.BILINEAR)
         buffer = io.BytesIO()
-        result.save(buffer, format="PNG")
-        buffer.seek(0)
+        result.save(buffer, format="JPEG", quality=85)
         print("✅Generation complete.")
-        return StreamingResponse(buffer, media_type="image/png")
+        return Response(buffer.getvalue(), media_type="image/jpeg")
 
     except Exception as e:
         print(f"❌Error during generation: {str(e)}")
@@ -139,12 +138,11 @@ async def generate(
                 **kwargs
             )
         # 4. Return Result
-        result = generated[0].resize((W, H), resample=Image.Resampling.LANCZOS)
+        result = generated[0].resize((W, H), resample=Image.Resampling.BILINEAR)
         buffer = io.BytesIO()
-        result.save(buffer, format="PNG")
-        buffer.seek(0)
+        result.save(buffer, format="JPEG", quality=85)
         print("✅Generation complete.")
-        return StreamingResponse(buffer, media_type="image/png")
+        return Response(buffer.getvalue(), media_type="image/jpeg")
 
     except Exception as e:
         print(f"❌Error during generation: {str(e)}")
