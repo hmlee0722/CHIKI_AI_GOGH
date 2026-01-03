@@ -3,7 +3,7 @@ import io
 import time
 import requests
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request
-from fastapi.responses import StreamingResponse, JSONResponse, Response
+from fastapi.responses import JSONResponse, Response
 from PIL import Image
 from diffusers import ControlNetModel, StableDiffusionXLControlNetPipeline, DDIMScheduler
 from ip_adapter import IPAdapterXL
@@ -14,7 +14,7 @@ app = FastAPI(title="CHIKI Gogh Style Transfer API",
               description="An API for style transfer using Stable Diffusion XL with ControlNet and IP-Adapter"
              )
 MODEL = None
-DEVICE = "cuda:2" if torch.cuda.is_available() else "cpu"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 DTYPE = torch.float16
 
 @app.on_event("startup")
@@ -92,9 +92,9 @@ async def generate_from_upload(
         # 4. Return Result
         result = generated[0].resize((W, H), resample=Image.Resampling.BILINEAR)
         buffer = io.BytesIO()
-        result.save(buffer, format="JPEG", quality=85)
+        result.save(buffer, format="PNG")
         print("✅Generation complete.")
-        return Response(buffer.getvalue(), media_type="image/jpeg")
+        return Response(buffer.getvalue(), media_type="image/png")
 
     except Exception as e:
         print(f"❌Error during generation: {str(e)}")
@@ -140,9 +140,9 @@ async def generate(
         # 4. Return Result
         result = generated[0].resize((W, H), resample=Image.Resampling.BILINEAR)
         buffer = io.BytesIO()
-        result.save(buffer, format="JPEG", quality=85)
+        result.save(buffer, format="PNG")
         print("✅Generation complete.")
-        return Response(buffer.getvalue(), media_type="image/jpeg")
+        return Response(buffer.getvalue(), media_type="image/png")
 
     except Exception as e:
         print(f"❌Error during generation: {str(e)}")
